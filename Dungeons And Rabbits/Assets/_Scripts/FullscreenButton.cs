@@ -17,8 +17,9 @@ public class FullscreenButton : MonoBehaviour, IPointerEnterHandler, IPointerExi
     private void Awake()
     {
         buttonImage = GetComponent<Image>();
-
         ButtonSpriteHandler();
+
+
     }
 
 
@@ -43,6 +44,11 @@ public class FullscreenButton : MonoBehaviour, IPointerEnterHandler, IPointerExi
             currentClickedImage = fullscreen_f_clickedImage;
         }
     }
+
+
+
+
+
 
     public void OnPointerEnter(PointerEventData eventData)
     {

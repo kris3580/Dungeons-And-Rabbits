@@ -7,7 +7,7 @@ public class VolumeSlider : MonoBehaviour
 {
     Slider volumeSlider;
 
-    private void Awake()
+    private void Start()
     {
         volumeSlider = GetComponent<Slider>();
         volumeSlider.value = MiscellaneousEvents.volume;
@@ -16,5 +16,6 @@ public class VolumeSlider : MonoBehaviour
     void Update()
     {
         MiscellaneousEvents.volume = volumeSlider.value;
+        PlayerPrefs.SetFloat("volume", MiscellaneousEvents.volume);
     }
 }

@@ -1,4 +1,5 @@
 
+using TMPro;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -15,6 +16,7 @@ public class MiscellaneousEvents : MonoBehaviour
     [SerializeField] AudioSource MusicSource;
     [SerializeField] AudioSource SFXSource;
 
+
     public static bool isWindowed;
     public static float volume;
 
@@ -24,7 +26,7 @@ public class MiscellaneousEvents : MonoBehaviour
         isWindowed = PlayerPrefs.GetInt("isWindowed") != 0;
         volume = PlayerPrefs.GetFloat("volume");
 
-        
+        ApplyDisplayModeChanges();
 
 
         SFXSource.volume = volume;
@@ -85,7 +87,8 @@ public class MiscellaneousEvents : MonoBehaviour
         isWindowed = !isWindowed;
         ApplyDisplayModeChanges();
 
-        PlayerPrefs.SetFloat("isWindowed", isWindowed ? 1 : 0);
+        
+        PlayerPrefs.SetInt("isWindowed", isWindowed ? 1 : 0);
 
     }
 
@@ -98,9 +101,10 @@ public class MiscellaneousEvents : MonoBehaviour
         else
         {
             Screen.SetResolution(Display.main.systemWidth, Display.main.systemHeight, isWindowed);
+            
         }
-
         Screen.fullScreen = !isWindowed;
+
     }
 
     public void OnVolumeChange()
