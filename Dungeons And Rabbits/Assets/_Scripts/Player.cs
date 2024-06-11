@@ -19,7 +19,7 @@ public class Player : MonoBehaviour
     }
 
     bool checkForWallForward, checkForWallBack, checkForWallLeft, checkForWallRight;
-    bool checkForSpikes;
+    bool checkForSpikesForward, checkForSpikesFBack, checkForSpikesRight, checkForSpikesLeft;
 
     void DrawRays()
     {
@@ -27,19 +27,21 @@ public class Player : MonoBehaviour
         Debug.DrawRay(new Vector3(transform.position.x, transform.position.y, transform.position.z), Vector3.left * rayLength, Color.blue);
         Debug.DrawRay(new Vector3(transform.position.x, transform.position.y, transform.position.z), Vector3.right * rayLength, Color.red);
         Debug.DrawRay(new Vector3(transform.position.x, transform.position.y, transform.position.z), Vector3.back * rayLength, Color.magenta);
-        Debug.DrawRay(new Vector3(transform.position.x, transform.position.y, transform.position.z), Vector3.down * rayLength, Color.gray);
-
-
-        
+        Debug.DrawRay(new Vector3(transform.position.x, transform.position.y, transform.position.z + 1), Vector3.down * rayLength, Color.gray);
+        Debug.DrawRay(new Vector3(transform.position.x, transform.position.y, transform.position.z - 1), Vector3.down * rayLength, Color.gray);
+        Debug.DrawRay(new Vector3(transform.position.x + 1, transform.position.y, transform.position.z), Vector3.down * rayLength, Color.gray);
+        Debug.DrawRay(new Vector3(transform.position.x - 1, transform.position.y, transform.position.z), Vector3.down * rayLength, Color.gray);
 
         checkForWallForward = Physics.Raycast(transform.position, Vector3.forward, rayLength, LayerMask.GetMask("Wall"));
         checkForWallBack = Physics.Raycast(transform.position, Vector3.back, rayLength, LayerMask.GetMask("Wall"));
         checkForWallLeft = Physics.Raycast(transform.position, Vector3.left, rayLength, LayerMask.GetMask("Wall"));
         checkForWallRight = Physics.Raycast(transform.position, Vector3.right, rayLength, LayerMask.GetMask("Wall"));
-        checkForSpikes = Physics.Raycast(transform.position, Vector3.down, rayLength, LayerMask.GetMask("Spikes"));
+        checkForSpikesForward = Physics.Raycast(new Vector3(transform.position.x, transform.position.y, transform.position.z + 1), Vector3.down, rayLength, LayerMask.GetMask("Spikes"));
+        checkForSpikesFBack = Physics.Raycast(new Vector3(transform.position.x, transform.position.y, transform.position.z - 1), Vector3.down, rayLength, LayerMask.GetMask("Spikes"));
+        checkForSpikesRight = Physics.Raycast(new Vector3(transform.position.x + 1, transform.position.y, transform.position.z), Vector3.down, rayLength, LayerMask.GetMask("Spikes"));
+        checkForSpikesLeft = Physics.Raycast(new Vector3(transform.position.x - 1, transform.position.y, transform.position.z), Vector3.down, rayLength, LayerMask.GetMask("Spikes"));
 
-
-        Debug.Log($"{checkForWallForward}, {checkForWallBack}, {checkForWallLeft}, {checkForWallRight}, {checkForSpikes}");
+        // Debug.Log($"{checkForWallForward}, {checkForWallBack}, {checkForWallLeft}, {checkForWallRight}");
 
     }
 

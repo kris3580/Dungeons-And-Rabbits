@@ -16,6 +16,10 @@ public class Platform : MonoBehaviour
 
     void Start()
     {
+        randomEndPosRangeX += transform.position.y;
+        randomEndPosRangeY += transform.position.y;
+
+
         transform.position = new Vector3(transform.position.x, Random.Range(randomStartPosRangeX, randomStartPosRangeY), transform.position.z);
 
         startPosition = transform.position;
