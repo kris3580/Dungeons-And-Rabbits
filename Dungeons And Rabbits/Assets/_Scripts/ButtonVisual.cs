@@ -29,8 +29,12 @@ public class ButtonVisual : MonoBehaviour, IPointerEnterHandler, IPointerExitHan
     public void OnPointerDown(PointerEventData eventData)
     {
         buttonImage.sprite = clickedButtonImage;
+        Invoke("ReturnToDefaultState", 0.1f);
     }
 
-
+    void ReturnToDefaultState()
+    {
+        buttonImage.sprite = unhoveredButtonImage;
+    }
 
 }

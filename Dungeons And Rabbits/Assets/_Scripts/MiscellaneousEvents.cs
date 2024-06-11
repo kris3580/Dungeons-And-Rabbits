@@ -9,7 +9,10 @@ public class MiscellaneousEvents : MonoBehaviour
 
     [SerializeField] GameObject settingsPanel;
     [SerializeField] GameObject creditsPanel;
+    [SerializeField] GameObject pausePanel;
+    [SerializeField] GameObject pauseSettingsPanel;
 
+    [SerializeField] GameObject pauseButtonUI;
     [SerializeField] GameObject transparentOverlay;
     [SerializeField] GameObject blackOverlay;
 
@@ -22,6 +25,10 @@ public class MiscellaneousEvents : MonoBehaviour
 
     private void Awake()
     {
+        MusicSource = GameObject.Find("Music").GetComponent<AudioSource>();
+        SFXSource = GameObject.Find("SFX").GetComponent<AudioSource>();
+
+
         // Player prefs stuff
         isWindowed = PlayerPrefs.GetInt("isWindowed") != 0;
         volume = PlayerPrefs.GetFloat("volume");
@@ -32,9 +39,6 @@ public class MiscellaneousEvents : MonoBehaviour
         SFXSource.volume = volume;
         MusicSource.volume = volume;
 
-
-
-        DontDestroyOnLoad(gameObject);
     }
 
 
@@ -117,9 +121,42 @@ public class MiscellaneousEvents : MonoBehaviour
 
     // PAUSED
 
+    public void PauseButton()
+    {
+        pauseButtonUI.SetActive(false);
+        transparentOverlay.SetActive(true);
+        pausePanel.SetActive(true);
+        Time.timeScale = 0;
+    }
 
+    public void Resume()
+    {
+        pauseButtonUI.SetActive(true);
+        transparentOverlay.SetActive(false);
+        pausePanel.SetActive(false);
+        Time.timeScale = 1;
+    }
 
+    public void RestartLevel()
+    {
+        SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+    }
 
+    public void PauseSettings()
+    {
+        pausePanel.SetActive(false);
+        pauseSettingsPanel.SetActive(true);
+    }
 
+    public void ExitToMenu()
+    {
+        SceneManager.LoadScene("Menu");
+    }
+
+    public void ReturnToPausePanel()
+    {
+        pausePanel.SetActive(true);
+        pauseSettingsPanel.SetActive(false);
+    }
 
 }
