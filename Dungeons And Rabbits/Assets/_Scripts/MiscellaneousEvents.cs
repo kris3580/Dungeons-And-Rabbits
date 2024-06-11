@@ -25,19 +25,19 @@ public class MiscellaneousEvents : MonoBehaviour
 
     private void Awake()
     {
-        MusicSource = GameObject.Find("Music").GetComponent<AudioSource>();
-        SFXSource = GameObject.Find("SFX").GetComponent<AudioSource>();
+        // UNCOMMENT CAND TERMINI JOCUL
+        // MusicSource = GameObject.Find("Music").GetComponent<AudioSource>();
+        // SFXSource = GameObject.Find("SFX").GetComponent<AudioSource>();
 
 
-        // Player prefs stuff
         isWindowed = PlayerPrefs.GetInt("isWindowed") != 0;
         volume = PlayerPrefs.GetFloat("volume");
 
         ApplyDisplayModeChanges();
 
-
-        SFXSource.volume = volume;
-        MusicSource.volume = volume;
+        // UNCOMMENT CAND TERMINI JOCUL
+        // SFXSource.volume = volume;
+        // MusicSource.volume = volume;
 
     }
 
@@ -139,6 +139,7 @@ public class MiscellaneousEvents : MonoBehaviour
 
     public void RestartLevel()
     {
+        Time.timeScale = 1f;
         SceneManager.LoadScene(SceneManager.GetActiveScene().name);
     }
 
@@ -150,7 +151,10 @@ public class MiscellaneousEvents : MonoBehaviour
 
     public void ExitToMenu()
     {
+        Time.timeScale = 1f;
+        Destroy(GameObject.Find("SoundManager"));
         SceneManager.LoadScene("Menu");
+        
     }
 
     public void ReturnToPausePanel()
