@@ -15,7 +15,7 @@ public class Player : MonoBehaviour
         PlayerInput();
         MovePlayer();
         DrawRays();
-
+        TorchHandler();
 
     }
 
@@ -131,20 +131,46 @@ public class Player : MonoBehaviour
     [SerializeField] Image[] heartSprites = new Image[5];
     [SerializeField] Sprite emptyHeartSprite;
     [SerializeField] GameObject healthPanel;
-    void RemoveHealth()
+
+    public void RemoveHealth()
     {
         health--;
         heartSprites[health].sprite = emptyHeartSprite;
 
+        healthPanel.GetComponent<Animation>().Play();
         
 
     }
 
 
+    public static float torchDuration = 0f;
+    MeshRenderer handTorchMesh;
+    GameObject handTorchParticles;
+
+    void TorchHandler()
+    {
+        
+
+        if (torchDuration > 0f)
+        {
+            handTorchMesh.enabled = true;
+            handTorchParticles.SetActive(true);
+            torchDuration -= Time.deltaTime;
+        }
+        else 
+        {
+            handTorchMesh.enabled = false;
+            handTorchParticles.SetActive(false);
+        }
+    }
+    
 
 
     private void Start()
     {
+        handTorchMesh = GameObject.Find("HandTorch").GetComponent<MeshRenderer>();
+        handTorchParticles = GameObject.Find("HandTorch");
+
         Invoke("EnableMovement", moveDelay);
     }
 

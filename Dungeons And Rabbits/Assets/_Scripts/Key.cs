@@ -5,10 +5,10 @@ using UnityEngine;
 public class Key : MonoBehaviour
 {
     Animator animator;
-    [SerializeField] GameObject doorToUnlock;
+    [SerializeField] Door doorToUnlock;
     [SerializeField] GameObject touchParticles;
     [SerializeField] GameObject vanishParticles;
-
+    
 
     private void Start()
     {
@@ -21,6 +21,7 @@ public class Key : MonoBehaviour
 
         if (other.tag == "Player")
         {
+            doorToUnlock.Open();
             touchParticles.SetActive(true);
             animator.SetBool("wasTaken", true);
             Invoke("SetOffKey", animator.runtimeAnimatorController.animationClips[1].length);
