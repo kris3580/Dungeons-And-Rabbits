@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 using static UnityEngine.UI.Image;
 
 public class Player : MonoBehaviour
@@ -124,6 +125,22 @@ public class Player : MonoBehaviour
     {
         isMoveAvailable = true;
     }
+
+
+    int health = 5;
+    [SerializeField] Image[] heartSprites = new Image[5];
+    [SerializeField] Sprite emptyHeartSprite;
+    [SerializeField] GameObject healthPanel;
+    void RemoveHealth()
+    {
+        health--;
+        heartSprites[health].sprite = emptyHeartSprite;
+
+        
+
+    }
+
+
 
 
     private void Start()
