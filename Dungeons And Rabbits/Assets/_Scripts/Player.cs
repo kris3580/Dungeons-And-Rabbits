@@ -18,28 +18,29 @@ public class Player : MonoBehaviour
         DrawRays();
         TorchHandler();
         CheckForIdleTime();
-        Debug.Log(isMoveAvailable);
 
     }
 
     bool checkForWallForward, checkForWallBack, checkForWallLeft, checkForWallRight;
     bool checkForSpikesForward, checkForSpikesBack, checkForSpikesRight, checkForSpikesLeft;
 
+    [SerializeField] float rayHeight = 0.2f;
+
     void DrawRays()
     {
-        Debug.DrawRay(new Vector3(transform.position.x, transform.position.y, transform.position.z), Vector3.forward * rayLength, Color.green);
-        Debug.DrawRay(new Vector3(transform.position.x, transform.position.y, transform.position.z), Vector3.left * rayLength, Color.blue);
-        Debug.DrawRay(new Vector3(transform.position.x, transform.position.y, transform.position.z), Vector3.right * rayLength, Color.red);
-        Debug.DrawRay(new Vector3(transform.position.x, transform.position.y, transform.position.z), Vector3.back * rayLength, Color.magenta);
+        Debug.DrawRay(new Vector3(transform.position.x, transform.position.y + rayHeight, transform.position.z), Vector3.forward * rayLength, Color.green);
+        Debug.DrawRay(new Vector3(transform.position.x, transform.position.y + rayHeight, transform.position.z), Vector3.left * rayLength, Color.blue);
+        Debug.DrawRay(new Vector3(transform.position.x, transform.position.y + rayHeight, transform.position.z), Vector3.right * rayLength, Color.red);
+        Debug.DrawRay(new Vector3(transform.position.x, transform.position.y + rayHeight, transform.position.z), Vector3.back * rayLength, Color.magenta);
         Debug.DrawRay(new Vector3(transform.position.x, transform.position.y, transform.position.z + 1), Vector3.down * rayLength, Color.gray);
         Debug.DrawRay(new Vector3(transform.position.x, transform.position.y, transform.position.z - 1), Vector3.down * rayLength, Color.gray);
         Debug.DrawRay(new Vector3(transform.position.x + 1, transform.position.y, transform.position.z), Vector3.down * rayLength, Color.gray);
         Debug.DrawRay(new Vector3(transform.position.x - 1, transform.position.y, transform.position.z), Vector3.down * rayLength, Color.gray);
 
-        checkForWallForward = Physics.Raycast(transform.position, Vector3.forward, rayLength, LayerMask.GetMask("Wall"));
-        checkForWallBack = Physics.Raycast(transform.position, Vector3.back, rayLength, LayerMask.GetMask("Wall"));
-        checkForWallLeft = Physics.Raycast(transform.position, Vector3.left, rayLength, LayerMask.GetMask("Wall"));
-        checkForWallRight = Physics.Raycast(transform.position, Vector3.right, rayLength, LayerMask.GetMask("Wall"));
+        checkForWallForward = Physics.Raycast(transform.position + new Vector3(0,rayHeight,0), Vector3.forward, rayLength, LayerMask.GetMask("Wall"));
+        checkForWallBack = Physics.Raycast(transform.position + new Vector3(0, rayHeight, 0), Vector3.back, rayLength, LayerMask.GetMask("Wall"));
+        checkForWallLeft = Physics.Raycast(transform.position + new Vector3(0, rayHeight, 0), Vector3.left, rayLength, LayerMask.GetMask("Wall"));
+        checkForWallRight = Physics.Raycast(transform.position + new Vector3(0, rayHeight, 0), Vector3.right, rayLength, LayerMask.GetMask("Wall"));
         checkForSpikesForward = Physics.Raycast(new Vector3(transform.position.x, transform.position.y, transform.position.z + 1), Vector3.down, rayLength, LayerMask.GetMask("Spikes"));
         checkForSpikesBack = Physics.Raycast(new Vector3(transform.position.x, transform.position.y, transform.position.z - 1), Vector3.down, rayLength, LayerMask.GetMask("Spikes"));
         checkForSpikesRight = Physics.Raycast(new Vector3(transform.position.x + 1, transform.position.y, transform.position.z), Vector3.down, rayLength, LayerMask.GetMask("Spikes"));
@@ -74,45 +75,31 @@ public class Player : MonoBehaviour
         
     }
 
-    bool wallHit;
-
-    void WallHandler()
-    {
-        wallHit = true;
-        isMoveAvailable = false;
-        //
-        //
-        //
-        //
-        Debug.Log(1);
-        //
-    }
-
     void PlayerInput()
     {
         
         if (Input.GetKeyDown(KeyCode.W) && isMoveAvailable)
         {
             if (checkForSpikesForward)  SpikeHandler();
-            else if (checkForWallForward) WallHandler();
+            else if (checkForWallForward) return;
             Movement("forward");
         }
         else if (Input.GetKeyDown(KeyCode.S) && isMoveAvailable)
         {
             if (checkForSpikesBack)  SpikeHandler();
-            else if (checkForWallBack) WallHandler();
+            else if (checkForWallBack) return;
             Movement("back");
         }
         else if (Input.GetKeyDown(KeyCode.A) && isMoveAvailable)
         {
             if (checkForSpikesLeft)  SpikeHandler();
-            else if (checkForWallLeft) WallHandler();
+            else if (checkForWallLeft) return;
             Movement("left");
         }
         else if (Input.GetKeyDown(KeyCode.D) && isMoveAvailable)
         {
             if (checkForSpikesRight) SpikeHandler();
-            else if (checkForWallRight) WallHandler();
+            else if (checkForWallRight) return;
             Movement("right");
         }
     }
@@ -193,6 +180,17 @@ public class Player : MonoBehaviour
 
         healthPanel.GetComponent<Animation>().Play();
         
+        if(health == 0)
+        {
+            StartCoroutine(RestartLevel());
+            
+        }
+
+        IEnumerator RestartLevel()
+        {
+            yield return new WaitForSeconds(1f);
+            MiscellaneousEvents.RestartLevel();
+        }
 
     }
 

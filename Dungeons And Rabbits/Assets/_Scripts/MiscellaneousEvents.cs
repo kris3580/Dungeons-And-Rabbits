@@ -48,7 +48,7 @@ public class MiscellaneousEvents : MonoBehaviour
     public void PlayButton()
     {
         blackOverlay.SetActive(true);
-        Invoke("LoadGame", 2.0f);
+        Invoke("LoadGame", 0.4f);
     }
 
     void LoadGame()
@@ -137,7 +137,7 @@ public class MiscellaneousEvents : MonoBehaviour
         Time.timeScale = 1;
     }
 
-    public void RestartLevel()
+    public static void RestartLevel()
     {
         Time.timeScale = 1f;
         SceneManager.LoadScene(SceneManager.GetActiveScene().name);

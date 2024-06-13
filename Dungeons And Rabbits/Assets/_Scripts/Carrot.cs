@@ -38,7 +38,7 @@ public class Carrot : MonoBehaviour
         vanishParticles.SetActive(true);
         gameObject.GetComponent<MeshRenderer>().enabled = false;
 
-        Invoke("NextScene", 3f);
+        Invoke("NextScene", 0.5f);
     }
 
     void NextScene()
