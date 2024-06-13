@@ -45318,7 +45318,7 @@ MonoBehaviour:
   - {fileID: 1176436923}
   - {fileID: 456259254}
   - {fileID: 769952481}
-  emptyHeartSprite: {fileID: 21300000, guid: cd8d55c256af410409c8aeb913fb79f1, type: 3}
+  emptyHeartSprite: {fileID: 21300000, guid: 8e7f663135886c54d8845d070cd5e65a, type: 3}
   healthPanel: {fileID: 164587707}
   rabbitModelAnimator: {fileID: 0}
   hurtRabbitAnimator: {fileID: 91358467}
