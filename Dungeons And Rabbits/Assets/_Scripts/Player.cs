@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UI;
 using static UnityEngine.UI.Image;
@@ -8,7 +9,7 @@ public class Player : MonoBehaviour
 {
     [SerializeField] float moveDelay = 0.5f;
     [SerializeField] float rayLength;
-    bool isMoveAvailable = true;
+    public bool isMoveAvailable = true;
 
     private void Update()
     {
@@ -16,6 +17,7 @@ public class Player : MonoBehaviour
         MovePlayer();
         DrawRays();
         TorchHandler();
+        CheckForIdleTime();
 
     }
 
@@ -73,7 +75,9 @@ public class Player : MonoBehaviour
         isMoveAvailable = false;
         startPosition = transform.position;
         startRotation = transform.rotation;
+        idleTime = 0;
 
+        TriggerBoolAnimation(rabbitModelAnimator, 1.13f / 5, "isJumpingState");
         Invoke("EnableMovement", moveDelay);
         if (desiredDirection == "forward")
         {
@@ -171,8 +175,60 @@ public class Player : MonoBehaviour
         handTorchMesh = GameObject.Find("HandTorch").GetComponent<MeshRenderer>();
         handTorchParticles = GameObject.Find("HandTorch");
 
+        rabbitModelAnimator = GameObject.Find("RabbitModel").GetComponent<Animator>();
+
         Invoke("EnableMovement", moveDelay);
     }
 
+
+    public Animator rabbitModelAnimator;
+
+    public void TriggerBoolAnimation(Animator targetAnimator, float currentAnimationDuration, string boolToToggle)
+    {
+        
+        targetAnimator.SetBool(boolToToggle, true);
+        StartCoroutine(Redeactivate());
+
+        IEnumerator Redeactivate()
+        {
+            Debug.Log(1);
+            yield return new WaitForSeconds(currentAnimationDuration);
+            targetAnimator.SetBool(boolToToggle, false);
+        }
+    }
+
+    float idleTime = 0;
+
+    void CheckForIdleTime()
+    {
+
+        if(idleTime >= Random.Range(7,12) && isMoveAvailable)
+        {
+            idleTime = 0f;
+            isMoveAvailable = false;
+            switch (Random.Range(0, 2))
+            {
+                case 0:
+                    TriggerBoolAnimation(rabbitModelAnimator, 2.09f, "backFlipState");
+
+                    break;
+                case 1:
+                    TriggerBoolAnimation(rabbitModelAnimator, 1.12f, "idleState");
+
+                    break;
+            }
+            isMoveAvailable = true;
+        }
+        else
+        {
+            idleTime += Time.deltaTime;
+        }
+    }
+
+
+    public Animator hurtRabbitAnimator;
+
+
+    
 
 }

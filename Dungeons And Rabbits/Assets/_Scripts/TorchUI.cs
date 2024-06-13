@@ -3,10 +3,11 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class TorchUICircle : MonoBehaviour
+public class TorchUI : MonoBehaviour
 {
 
     public Image radialImage;
+    [SerializeField] Image torchIcon;
 
     private void Start()
     {
@@ -18,10 +19,19 @@ public class TorchUICircle : MonoBehaviour
 
         radialImage.fillAmount = Player.torchAmount / Torch.torchDurationLimit;
 
-        Debug.Log($"{Player.torchAmount}, {Torch.torchDurationLimit}, {Player.torchAmount / Torch.torchDurationLimit}");
-
+        //Debug.Log($"{Player.torchAmount}, {Torch.torchDurationLimit}, {Player.torchAmount / Torch.torchDurationLimit}");
 
         radialImage.color = Color.Lerp(Color.red, Color.green, Player.torchAmount / Torch.torchDurationLimit);
+
+        if (Player.torchAmount <= 0)
+        {
+            torchIcon.enabled = false;
+        }
+        else
+        {
+            torchIcon.enabled = true;
+        }
+
     }
 
 }
