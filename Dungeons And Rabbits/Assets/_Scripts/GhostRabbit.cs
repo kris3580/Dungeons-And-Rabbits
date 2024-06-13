@@ -13,11 +13,12 @@ public class GhostRabbit : MonoBehaviour
         MovePlayer();
         DrawRays();
 
-        Debug.Log($"{checkForWallForward}, {checkForWallBack}, {checkForWallLeft}, {checkForWallRight}");
     }
 
     bool checkForWallForward, checkForWallBack, checkForWallLeft, checkForWallRight;
     bool checkForSpikesForward, checkForSpikesFBack, checkForSpikesRight, checkForSpikesLeft;
+    bool checkForPlayerForward, checkForPlayerBack, checkForPlayerLeft, checkForPlayerRight;
+
 
     void DrawRays()
     {
@@ -34,13 +35,17 @@ public class GhostRabbit : MonoBehaviour
         checkForWallBack = Physics.Raycast(transform.position, Vector3.back, rayLength, LayerMask.GetMask("Wall"));
         checkForWallLeft = Physics.Raycast(transform.position, Vector3.left, rayLength, LayerMask.GetMask("Wall"));
         checkForWallRight = Physics.Raycast(transform.position, Vector3.right, rayLength, LayerMask.GetMask("Wall"));
+
         checkForSpikesForward = Physics.Raycast(new Vector3(transform.position.x, transform.position.y, transform.position.z + 1), Vector3.down, rayLength, LayerMask.GetMask("Spikes"));
         checkForSpikesFBack = Physics.Raycast(new Vector3(transform.position.x, transform.position.y, transform.position.z - 1), Vector3.down, rayLength, LayerMask.GetMask("Spikes"));
         checkForSpikesRight = Physics.Raycast(new Vector3(transform.position.x + 1, transform.position.y, transform.position.z), Vector3.down, rayLength, LayerMask.GetMask("Spikes"));
         checkForSpikesLeft = Physics.Raycast(new Vector3(transform.position.x - 1, transform.position.y, transform.position.z), Vector3.down, rayLength, LayerMask.GetMask("Spikes"));
 
-        
 
+        checkForPlayerForward = Physics.Raycast(transform.position, Vector3.forward, rayLength, LayerMask.GetMask("Player"));
+        checkForPlayerBack = Physics.Raycast(transform.position, Vector3.back, rayLength, LayerMask.GetMask("Player"));
+        checkForPlayerLeft = Physics.Raycast(transform.position, Vector3.left, rayLength, LayerMask.GetMask("Player"));
+        checkForPlayerRight = Physics.Raycast(transform.position, Vector3.right, rayLength, LayerMask.GetMask("Player"));
     }
 
 
@@ -120,11 +125,32 @@ public class GhostRabbit : MonoBehaviour
         yield return new WaitForSeconds(Random.Range(randomAIWaitTimeX, randomAIWaitTimeY));
         while (true)
         {
+
             string[] moveTypes = { "forward", "back", "left", "right" };
             int movementNumber = Random.Range(0, 4);
-            Debug.Log(movementNumber);
+            
 
-            if (!checkForWallForward && movementNumber == 0)
+            if (checkForPlayerForward)
+            {
+                Movement(moveTypes[0]);
+                break;
+            }
+            else if (checkForPlayerBack)
+            {
+                Movement(moveTypes[1]);
+                break;
+            }
+            else if (checkForPlayerLeft)
+            {
+                Movement(moveTypes[2]);
+                break;
+            }
+            else if (checkForPlayerRight)
+            {
+                Movement(moveTypes[3]);
+                break;
+            }
+            else if (!checkForWallForward && movementNumber == 0)
             {
                 Movement(moveTypes[0]);
                 break;

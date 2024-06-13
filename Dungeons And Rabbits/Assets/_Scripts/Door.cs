@@ -10,7 +10,9 @@ public class Door : MonoBehaviour
 
     public void Open()
     {
-
+        door.GetComponent<Animation>().Play();
+        doorWall.layer = 0;
+        door.layer = 0;
     }
 
 

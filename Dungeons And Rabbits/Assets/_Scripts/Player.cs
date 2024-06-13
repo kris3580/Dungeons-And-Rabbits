@@ -143,7 +143,7 @@ public class Player : MonoBehaviour
     }
 
 
-    public static float torchDuration = 0f;
+    public static float torchAmount = 0f;
     MeshRenderer handTorchMesh;
     GameObject handTorchParticles;
 
@@ -151,11 +151,11 @@ public class Player : MonoBehaviour
     {
         
 
-        if (torchDuration > 0f)
+        if (torchAmount > 0f)
         {
             handTorchMesh.enabled = true;
             handTorchParticles.SetActive(true);
-            torchDuration -= Time.deltaTime;
+            torchAmount -= Time.deltaTime;
         }
         else 
         {
