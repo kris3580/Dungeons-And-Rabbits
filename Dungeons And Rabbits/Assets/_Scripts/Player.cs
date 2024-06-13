@@ -18,11 +18,12 @@ public class Player : MonoBehaviour
         DrawRays();
         TorchHandler();
         CheckForIdleTime();
+        Debug.Log(isMoveAvailable);
 
     }
 
     bool checkForWallForward, checkForWallBack, checkForWallLeft, checkForWallRight;
-    bool checkForSpikesForward, checkForSpikesFBack, checkForSpikesRight, checkForSpikesLeft;
+    bool checkForSpikesForward, checkForSpikesBack, checkForSpikesRight, checkForSpikesLeft;
 
     void DrawRays()
     {
@@ -40,31 +41,78 @@ public class Player : MonoBehaviour
         checkForWallLeft = Physics.Raycast(transform.position, Vector3.left, rayLength, LayerMask.GetMask("Wall"));
         checkForWallRight = Physics.Raycast(transform.position, Vector3.right, rayLength, LayerMask.GetMask("Wall"));
         checkForSpikesForward = Physics.Raycast(new Vector3(transform.position.x, transform.position.y, transform.position.z + 1), Vector3.down, rayLength, LayerMask.GetMask("Spikes"));
-        checkForSpikesFBack = Physics.Raycast(new Vector3(transform.position.x, transform.position.y, transform.position.z - 1), Vector3.down, rayLength, LayerMask.GetMask("Spikes"));
+        checkForSpikesBack = Physics.Raycast(new Vector3(transform.position.x, transform.position.y, transform.position.z - 1), Vector3.down, rayLength, LayerMask.GetMask("Spikes"));
         checkForSpikesRight = Physics.Raycast(new Vector3(transform.position.x + 1, transform.position.y, transform.position.z), Vector3.down, rayLength, LayerMask.GetMask("Spikes"));
         checkForSpikesLeft = Physics.Raycast(new Vector3(transform.position.x - 1, transform.position.y, transform.position.z), Vector3.down, rayLength, LayerMask.GetMask("Spikes"));
 
-        // Debug.Log($"{checkForWallForward}, {checkForWallBack}, {checkForWallLeft}, {checkForWallRight}");
+         Debug.Log($"{checkForWallForward}, {checkForWallBack}, {checkForWallLeft}, {checkForWallRight}");
 
     }
 
+    [SerializeField] Animator additionalRabbitAnimator;
+
+    bool spikeHit;
+    void SetToTrue()
+    {
+        isMoveAvailable = true;
+        spikeHit = false;
+    }
+    void LateHitAnimation()
+    {
+        RemoveHealth();
+        TriggerBoolAnimation(hurtRabbitAnimator, 2.9f / 4, "isHurtState");
+    }
+
+    void SpikeHandler()
+    {
+        spikeHit = true;
+        isMoveAvailable = false;
+        TriggerBoolAnimation(rabbitModelAnimator, 2.9f/4, "jumpSpikesState");
+        TriggerBoolAnimation(additionalRabbitAnimator, 2.9f / 4, "isHurtBySpike");
+        Invoke("LateHitAnimation", 0.4f);
+        Invoke("SetToTrue", 2.9f / 4);
+        
+    }
+
+    bool wallHit;
+
+    void WallHandler()
+    {
+        wallHit = true;
+        isMoveAvailable = false;
+        //
+        //
+        //
+        //
+        Debug.Log(1);
+        //
+    }
 
     void PlayerInput()
     {
+        
         if (Input.GetKeyDown(KeyCode.W) && isMoveAvailable)
         {
+            if (checkForSpikesForward)  SpikeHandler();
+            else if (checkForWallForward) WallHandler();
             Movement("forward");
         }
         else if (Input.GetKeyDown(KeyCode.S) && isMoveAvailable)
         {
+            if (checkForSpikesBack)  SpikeHandler();
+            else if (checkForWallBack) WallHandler();
             Movement("back");
         }
         else if (Input.GetKeyDown(KeyCode.A) && isMoveAvailable)
         {
+            if (checkForSpikesLeft)  SpikeHandler();
+            else if (checkForWallLeft) WallHandler();
             Movement("left");
         }
         else if (Input.GetKeyDown(KeyCode.D) && isMoveAvailable)
         {
+            if (checkForSpikesRight) SpikeHandler();
+            else if (checkForWallRight) WallHandler();
             Movement("right");
         }
     }
@@ -77,27 +125,29 @@ public class Player : MonoBehaviour
         startRotation = transform.rotation;
         idleTime = 0;
 
-        TriggerBoolAnimation(rabbitModelAnimator, 1.13f / 5, "isJumpingState");
-        Invoke("EnableMovement", moveDelay);
+        if (!spikeHit) TriggerBoolAnimation(rabbitModelAnimator, 1.13f / 5, "isJumpingState");
+
+        if (!spikeHit) Invoke("EnableMovement", moveDelay);
+        else Invoke("EnableMovement", 1);
         if (desiredDirection == "forward")
         {
             endRotation = Quaternion.Euler(0f, 0f, 0f);
-            endPosition = startPosition + Vector3.forward;
+            if(!spikeHit) endPosition = startPosition + Vector3.forward;
         }
         else if (desiredDirection == "back")
         {
             endRotation = Quaternion.Euler(0f, 180f, 0f);
-            endPosition = startPosition + Vector3.back;
+            if (!spikeHit) endPosition = startPosition + Vector3.back;
         }
         else if (desiredDirection == "left")
         {
             endRotation = Quaternion.Euler(0f, -90f, 0f);
-            endPosition = startPosition + Vector3.left;
+            if (!spikeHit) endPosition = startPosition + Vector3.left;
         }
         else if (desiredDirection == "right")
         {
             endRotation = Quaternion.Euler(0f, 90f, 0f);
-            endPosition = startPosition + Vector3.right;
+            if (!spikeHit) endPosition = startPosition + Vector3.right;
         }
     }
 
@@ -117,7 +167,7 @@ public class Player : MonoBehaviour
             elapsedTime += Time.deltaTime;
             float percentageComplete = elapsedTime / lerpMoveDuration;
 
-            transform.position = Vector3.Lerp(startPosition, endPosition, Mathf.SmoothStep(0, 1, percentageComplete));
+            if (!spikeHit) transform.position = Vector3.Lerp(startPosition, endPosition, Mathf.SmoothStep(0, 1, percentageComplete));
             transform.rotation = Quaternion.Lerp(startRotation, endRotation, Mathf.SmoothStep(0, 1, percentageComplete));
         }
         else
@@ -177,7 +227,7 @@ public class Player : MonoBehaviour
 
         rabbitModelAnimator = GameObject.Find("RabbitModel").GetComponent<Animator>();
 
-        Invoke("EnableMovement", moveDelay);
+         Invoke("EnableMovement", moveDelay);
     }
 
 
@@ -191,7 +241,7 @@ public class Player : MonoBehaviour
 
         IEnumerator Redeactivate()
         {
-            Debug.Log(1);
+            
             yield return new WaitForSeconds(currentAnimationDuration);
             targetAnimator.SetBool(boolToToggle, false);
         }
