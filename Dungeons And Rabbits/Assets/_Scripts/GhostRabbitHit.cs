@@ -16,6 +16,7 @@ public class GhostRabbitHit : MonoBehaviour
     {
         if (other.tag == "Player")
         {
+            SoundManager.SFXSource.PlayOneShot(SoundManager.sfxClips[0]);
             player.RemoveHealth();
             player.TriggerBoolAnimation(player.rabbitModelAnimator, 1.1f, "jumpGhostState");
             player.TriggerBoolAnimation(player.hurtRabbitAnimator, 1.1f, "isHurtState");

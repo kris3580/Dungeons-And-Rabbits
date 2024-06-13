@@ -21,6 +21,7 @@ public class Key : MonoBehaviour
 
         if (other.tag == "Player")
         {
+            SoundManager.SFXSource.PlayOneShot(SoundManager.sfxClips[7]);
             doorToUnlock.Open();
             touchParticles.SetActive(true);
             animator.SetBool("wasTaken", true);

@@ -16,8 +16,7 @@ public class MiscellaneousEvents : MonoBehaviour
     [SerializeField] GameObject transparentOverlay;
     [SerializeField] GameObject blackOverlay;
 
-    [SerializeField] AudioSource MusicSource;
-    [SerializeField] AudioSource SFXSource;
+    
 
 
     public static bool isWindowed;
@@ -25,9 +24,8 @@ public class MiscellaneousEvents : MonoBehaviour
 
     private void Awake()
     {
-        // UNCOMMENT CAND TERMINI JOCUL
-        // MusicSource = GameObject.Find("Music").GetComponent<AudioSource>();
-        // SFXSource = GameObject.Find("SFX").GetComponent<AudioSource>();
+        
+        
 
 
         isWindowed = PlayerPrefs.GetInt("isWindowed") != 0;
@@ -35,11 +33,14 @@ public class MiscellaneousEvents : MonoBehaviour
 
         ApplyDisplayModeChanges();
 
-        // UNCOMMENT CAND TERMINI JOCUL
-        // SFXSource.volume = volume;
-        // MusicSource.volume = volume;
+
+        SoundManager.SFXSource.volume = volume;
+        SoundManager.MusicSource.volume = volume;
 
     }
+
+
+    
 
 
 
@@ -47,6 +48,7 @@ public class MiscellaneousEvents : MonoBehaviour
 
     public void PlayButton()
     {
+        SoundManager.SFXSource.PlayOneShot(SoundManager.sfxClips[4]);
         blackOverlay.SetActive(true);
         Invoke("LoadGame", 0.4f);
     }
@@ -59,6 +61,7 @@ public class MiscellaneousEvents : MonoBehaviour
     public void SettingsButton()
 
     {
+        SoundManager.SFXSource.PlayOneShot(SoundManager.sfxClips[4]);
         transparentOverlay.SetActive(true);
         settingsPanel.SetActive(true);
     }
@@ -66,12 +69,14 @@ public class MiscellaneousEvents : MonoBehaviour
     public void CreditsButton()
 
     {
+        SoundManager.SFXSource.PlayOneShot(SoundManager.sfxClips[4]);
         transparentOverlay.SetActive(true);
         creditsPanel.SetActive(true);
     }
 
     public void ExitWindowButton()
     {
+        SoundManager.SFXSource.PlayOneShot(SoundManager.sfxClips[3]);
         settingsPanel.SetActive(false);
         creditsPanel.SetActive(false);
         transparentOverlay.SetActive(false);
@@ -81,17 +86,25 @@ public class MiscellaneousEvents : MonoBehaviour
 
     // GENERAL
 
-    public void ExitButton()
+    void CloseGame()
     {
         Application.Quit();
+
+    }
+
+    public void ExitButton()
+    {
+        SoundManager.SFXSource.PlayOneShot(SoundManager.sfxClips[3]);
+        Invoke("CloseGame", 0.5f);
+        
     }
 
     public void ChangeDisplayModeButton()
     {
         isWindowed = !isWindowed;
         ApplyDisplayModeChanges();
+        SoundManager.SFXSource.PlayOneShot(SoundManager.sfxClips[4]);
 
-        
         PlayerPrefs.SetInt("isWindowed", isWindowed ? 1 : 0);
 
     }
@@ -113,8 +126,8 @@ public class MiscellaneousEvents : MonoBehaviour
 
     public void OnVolumeChange()
     {
-        MusicSource.volume = volume;
-        SFXSource.volume = volume;
+        SoundManager.MusicSource.volume = volume;
+        SoundManager.SFXSource.volume = volume;
 
         PlayerPrefs.SetFloat("volume", volume);
     }
@@ -123,6 +136,7 @@ public class MiscellaneousEvents : MonoBehaviour
 
     public void PauseButton()
     {
+        SoundManager.SFXSource.PlayOneShot(SoundManager.sfxClips[3]);
         pauseButtonUI.SetActive(false);
         transparentOverlay.SetActive(true);
         pausePanel.SetActive(true);
@@ -131,6 +145,7 @@ public class MiscellaneousEvents : MonoBehaviour
 
     public void Resume()
     {
+        SoundManager.SFXSource.PlayOneShot(SoundManager.sfxClips[4]);
         pauseButtonUI.SetActive(true);
         transparentOverlay.SetActive(false);
         pausePanel.SetActive(false);
@@ -139,18 +154,21 @@ public class MiscellaneousEvents : MonoBehaviour
 
     public static void RestartLevel()
     {
+        SoundManager.SFXSource.PlayOneShot(SoundManager.sfxClips[4]);
         Time.timeScale = 1f;
         SceneManager.LoadScene(SceneManager.GetActiveScene().name);
     }
 
     public void PauseSettings()
     {
+        SoundManager.SFXSource.PlayOneShot(SoundManager.sfxClips[4]);
         pausePanel.SetActive(false);
         pauseSettingsPanel.SetActive(true);
     }
 
     public void ExitToMenu()
     {
+        SoundManager.SFXSource.PlayOneShot(SoundManager.sfxClips[4]);
         Time.timeScale = 1f;
         Destroy(GameObject.Find("SoundManager"));
         SceneManager.LoadScene("Menu");
@@ -159,6 +177,7 @@ public class MiscellaneousEvents : MonoBehaviour
 
     public void ReturnToPausePanel()
     {
+        SoundManager.SFXSource.PlayOneShot(SoundManager.sfxClips[3]);
         pausePanel.SetActive(true);
         pauseSettingsPanel.SetActive(false);
     }

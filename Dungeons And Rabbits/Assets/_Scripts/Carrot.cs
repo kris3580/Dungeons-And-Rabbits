@@ -15,7 +15,7 @@ public class Carrot : MonoBehaviour
     {
         if (other.tag == "Player")
         {
-
+            SoundManager.SFXSource.PlayOneShot(SoundManager.sfxClips[7]);
             touchParticles.SetActive(true);
             animator.SetBool("wasTaken", true);
 
@@ -37,7 +37,7 @@ public class Carrot : MonoBehaviour
 
         vanishParticles.SetActive(true);
         gameObject.GetComponent<MeshRenderer>().enabled = false;
-
+        SoundManager.SFXSource.PlayOneShot(SoundManager.sfxClips[1]);
         Invoke("NextScene", 0.5f);
     }
 

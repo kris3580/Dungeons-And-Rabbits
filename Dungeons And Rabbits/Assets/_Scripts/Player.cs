@@ -66,6 +66,7 @@ public class Player : MonoBehaviour
 
     void SpikeHandler()
     {
+        SoundManager.SFXSource.PlayOneShot(SoundManager.sfxClips[0]);
         spikeHit = true;
         isMoveAvailable = false;
         TriggerBoolAnimation(rabbitModelAnimator, 2.9f/4, "jumpSpikesState");
@@ -105,8 +106,15 @@ public class Player : MonoBehaviour
     }
 
 
+    
+
     void Movement(string desiredDirection)
     {
+        
+        SoundManager.SFXSource.PlayOneShot(SoundManager.sfxClips[Random.Range(5,7)]);
+
+        Invoke("NextStepSFX", 0.1f);
+
         isMoveAvailable = false;
         startPosition = transform.position;
         startRotation = transform.rotation;

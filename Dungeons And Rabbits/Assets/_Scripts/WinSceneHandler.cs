@@ -15,7 +15,8 @@ public class WinSceneHandler : MonoBehaviour
 
     void GoToMenu()
     {
-        SceneManager.LoadScene("Menu");
+         
+         SceneManager.LoadScene("Menu");
     }
 
     IEnumerator FireworksHandler()
