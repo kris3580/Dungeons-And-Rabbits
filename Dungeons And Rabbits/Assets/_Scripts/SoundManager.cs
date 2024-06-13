@@ -28,16 +28,32 @@ public class SoundManager : MonoBehaviour
         sfxClips[7] = Resources.Load<AudioClip>("wavey_appear");
         DontDestroyOnLoad(gameObject);
 
-        if (SceneManager.GetActiveScene().name == "Win")
+       
+
+
+        
+
+        
+
+
+
+    }
+
+    void DestroySoundManager()
+    {
+        Debug.Log("BBBBB");
+        Destroy(gameObject);
+    }
+
+
+    bool check = false;
+    void Update()
+    {
+        if (SceneManager.GetActiveScene().name == "Win" && check == false)
         {
-            Invoke("DestroySoundManager", 22.9f);
+            check =true;
+            Debug.Log("AAAAAA");
+            Invoke("DestroySoundManager", 22f);
         }
-
-
-        void DestroySoundManager()
-        {
-            Destroy(gameObject);
-        }
-
     }
 }
